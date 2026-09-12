@@ -1,7 +1,7 @@
 import React from 'react';
 import { CORE_CAPABILITIES, PORTFOLIO_META } from '../data/portfolioData';
 import { DeliveryLifecycleAnimation } from './DeliveryLifecycleAnimation';
-import portraitImg from '../assets/images/sidra_original_photo_1789211515793.jpg';
+import { SIDRA_PORTRAIT_BASE64 } from '../assets/portraitBase64';
 
 export const AboutMe: React.FC = () => {
   return (
@@ -17,18 +17,14 @@ export const AboutMe: React.FC = () => {
           </div>
         </div>
 
-        {/* Profile Section with Static Picture */}
+        {/* Profile Section with Static Picture Embedded in Code */}
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12 items-start">
           {/* Picture Column on Cream Paper - Centered on mobile, aligned on desktop */}
           <div className="md:col-span-4 lg:col-span-3 flex justify-center md:justify-start">
             <div className="bg-[#E8E1D0] border border-[rgba(11,61,46,0.15)] p-3 w-full max-w-[260px] sm:max-w-[280px] space-y-3 shadow-xs">
               <div className="relative overflow-hidden bg-[#DCD4C0] aspect-[3/4]">
                 <img
-                  src={portraitImg}
-                  onError={(e) => {
-                    // Fallback to static public root asset if bundled asset path varies
-                    (e.currentTarget as HTMLImageElement).src = '/sidra-profile.jpg';
-                  }}
+                  src={SIDRA_PORTRAIT_BASE64}
                   alt="Sidra tul Muntaha - AI Automation Specialist"
                   className="w-full h-full object-cover object-[center_top]"
                   referrerPolicy="no-referrer"
