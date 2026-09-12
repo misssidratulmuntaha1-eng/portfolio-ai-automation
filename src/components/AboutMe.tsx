@@ -5,13 +5,60 @@ import portraitImg from '../assets/images/sidra_original_photo_1789211515793.jpg
 
 export const AboutMe: React.FC = () => {
   const [photoSrc, setPhotoSrc] = useState<string>(portraitImg);
+  const [saveStatus, setSaveStatus] = useState<string | null>(null);
 
   useEffect(() => {
     const saved = localStorage.getItem('sidra_original_photo');
     if (saved) {
       setPhotoSrc(saved);
+      // Automatically persist to project files so Vercel and deployed builds include it permanently
+      if (saved.startsWith('data:image')) {
+        fetch('/api/save-photo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: saved }),
+        })
+          .then((res) => {
+            if (res.ok) {
+              setSaveStatus('saved');
+            }
+          })
+          .catch(() => {});
+      }
     }
   }, []);
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !file.type.startsWith('image/')) return;
+
+    const reader = new FileReader();
+    reader.onload = (event) => {
+      const dataUrl = event.target?.result as string;
+      if (dataUrl) {
+        setPhotoSrc(dataUrl);
+        try {
+          localStorage.setItem('sidra_original_photo', dataUrl);
+        } catch {
+          // Ignore quota error
+        }
+
+        fetch('/api/save-photo', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ image: dataUrl }),
+        })
+          .then((res) => {
+            if (res.ok) {
+              setSaveStatus('Photo permanently saved to project files!');
+              setTimeout(() => setSaveStatus(null), 4000);
+            }
+          })
+          .catch(() => {});
+      }
+    };
+    reader.readAsDataURL(file);
+  };
 
   return (
     <section id="about-me" className="py-16 sm:py-24 border-b border-[rgba(11,61,46,0.15)]">
@@ -43,6 +90,26 @@ export const AboutMe: React.FC = () => {
               <div className="pt-1 text-center md:text-left">
                 <div className="font-display font-bold text-sm text-[#1A1A17]">
                   {PORTFOLIO_META.name}
+                </div>
+                <div className="mt-1.5 flex flex-col items-center md:items-start">
+                  <label
+                    htmlFor="portrait-file-input"
+                    className="text-[11px] font-mono text-[#0B3D2E]/70 hover:text-[#0B3D2E] hover:underline cursor-pointer"
+                  >
+                    Change photo file
+                  </label>
+                  <input
+                    id="portrait-file-input"
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    className="hidden"
+                  />
+                  {saveStatus && (
+                    <span className="text-[11px] font-mono text-[#0B3D2E] font-medium mt-0.5">
+                      {saveStatus === 'saved' ? '✓ Synced permanently' : saveStatus}
+                    </span>
+                  )}
                 </div>
               </div>
             </div>
