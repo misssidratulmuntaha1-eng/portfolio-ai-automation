@@ -1,0 +1,55 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Newsreader", "Playfair Display", Georgia, "Times New Roman", serif;
+  --font-sans: "IBM Plex Sans", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-cream-bg: #F4F0E6;
+  --color-cream-paper: #E8E1D0;
+  --color-green-deep: #0B3D2E;
+  --color-gold-accent: #C9A227;
+  --color-ink-primary: #1A1A17;
+  --color-ink-secondary: #4A453C;
+  --color-ink-muted: #6B6355;
+  --color-rule: rgba(11, 61, 46, 0.15);
+}
+
+@layer base {
+  :root {
+    --color-cream-bg: #F4F0E6;
+    --color-cream-paper: #E8E1D0;
+    --color-green-deep: #0B3D2E;
+    --color-gold-accent: #C9A227;
+    --color-ink-primary: #1A1A17;
+    --color-ink-secondary: #4A453C;
+    --color-ink-muted: #6B6355;
+    --color-rule: rgba(11, 61, 46, 0.15);
+  }
+
+  body {
+    font-family: var(--font-sans);
+    background-color: #F4F0E6;
+    color: #1A1A17;
+    letter-spacing: -0.01em;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: var(--font-display);
+    font-weight: 700;
+  }
+
+  code, pre, .font-technical {
+    font-family: var(--font-mono);
+  }
+}
+
+/* Editorial rule lines & micro typography */
+.rule-subtle {
+  border-color: rgba(11, 61, 46, 0.15);
+}
+
+.rule-active {
+  border-color: rgba(11, 61, 46, 0.35);
+}
+
